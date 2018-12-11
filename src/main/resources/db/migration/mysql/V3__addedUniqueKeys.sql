@@ -1,0 +1,9 @@
+ALTER TABLE `loja` 
+ADD UNIQUE INDEX `cnpj_UNIQUE` (`cnpj` ASC);
+
+ALTER TABLE `usuario` 
+ADD UNIQUE INDEX `UQ_USUARIO_EMAIL` (`email` ASC);
+
+ALTER TABLE `cliente` 
+ADD UNIQUE INDEX `UQ_CLIENTE_LOJAID_EMAIL` (`loja_id` ASC, `email` ASC);
+
