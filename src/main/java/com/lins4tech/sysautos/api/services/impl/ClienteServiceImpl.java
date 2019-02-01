@@ -1,7 +1,6 @@
 package com.lins4tech.sysautos.api.services.impl;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,14 +27,23 @@ public class ClienteServiceImpl implements ClienteService{
 		return clienteRepository.findCliente(lojaId, nome, email, cpfCnpj, tipo, pageRequest);
 	}
 
-	public Optional<Cliente> findByLojaIdAndCpfCnpj(Long lojaId, String cpfCnpj) {
+	public Cliente findByLojaIdAndCpfCnpj(Long lojaId, String cpfCnpj) {
 		log.info("Consultar Cliente por LojaId:{} e CpfCnpj: {}", lojaId, cpfCnpj);
-		return Optional.ofNullable(clienteRepository.findByLojaIdAndCpfCnpj(lojaId, cpfCnpj));
+		return clienteRepository.findByLojaIdAndCpfCnpj(lojaId, cpfCnpj);
 	}
 	
 	public Cliente save(Cliente c) {
 		log.info("Salvando um Cliente: {}", c);
 		return clienteRepository.save(c);
+	}
+	
+	public void deleteById(Long id) {
+		log.info("Excluindo um Cliente: {}", id);
+		clienteRepository.deleteById(id);
+	} 
+	public Cliente findById(Long id) {
+		log.info("FindById ClienteId: {}", id);
+		return clienteRepository.findById(id).orElse(null);
 	}
 	
 	public void remove(Long clienteId) {

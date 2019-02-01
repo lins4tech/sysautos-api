@@ -1,7 +1,6 @@
 package com.lins4tech.sysautos.api.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.domain.PageRequest;
 
@@ -28,6 +27,18 @@ public interface ClienteService {
 	 * @param cpfCnpj
 	 * @return Cliente
 	 */
-	Optional<Cliente> findByLojaIdAndCpfCnpj(Long lojaId, String cpfCnpj);
+	Cliente findByLojaIdAndCpfCnpj(Long lojaId, String cpfCnpj);
+	
+	/**
+	 * Consulta o cliente pelo Id.
+	 * @param id
+	 * @return
+	 */
+	Cliente findById(Long id);
+	
+	
+	Cliente save(Cliente c);
+	
+	void deleteById(Long id);
 
 }

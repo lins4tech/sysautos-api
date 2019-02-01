@@ -11,6 +11,8 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,11 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lins4tech.sysautos.api.dtos.ClienteDto;
 import com.lins4tech.sysautos.api.entities.Cliente;
+import com.lins4tech.sysautos.api.entities.Loja;
 import com.lins4tech.sysautos.api.enums.TipoClienteEnum;
 import com.lins4tech.sysautos.api.services.ClienteService;
+import com.lins4tech.sysautos.api.services.LojaService;
 
 @RestController
-@RequestMapping("/api/clientes")
+@RequestMapping("/api/cliente")
 @CrossOrigin(origins = "*")
 public class ClienteController {
 	
@@ -30,6 +34,9 @@ public class ClienteController {
 	
 	@Autowired
 	private ClienteService clienteService;
+	
+	@Autowired
+	private LojaService lojaService;
 	
 	@RequestMapping(value = "/findCliente", method = RequestMethod.GET)
 	public ResponseEntity<List<ClienteDto>> findCliente(
@@ -42,6 +49,7 @@ public class ClienteController {
 			@RequestParam(value = "ord", defaultValue = "nomeCompleto") String ord,
 			@RequestParam(value = "dir", defaultValue = "DESC") String dir,
 			@RequestParam(value = "size", defaultValue = "30") Integer size) {
+		
 		PageRequest pageRequest = PageRequest.of(pag, size, Direction.valueOf(dir), ord);
 		log.info("Chama ao ClienteController.findCliente - LojaId = {}", lojaId);
 		TipoClienteEnum tipoCliente = null;
@@ -50,16 +58,55 @@ public class ClienteController {
 		}
 		List<Cliente> listClientes = clienteService.findCliente(lojaId, nome, email, cpfCnpj, tipoCliente, pageRequest);
 		
-
-		return new ResponseEntity<>(parseToListClienteDto(listClientes), HttpStatus.OK);
+		return new ResponseEntity<>(parseListClienteToListClienteDto(listClientes), HttpStatus.OK);
 	}
 	
-	private List<ClienteDto> parseToListClienteDto(List<Cliente> list) {
+	@RequestMapping(method = RequestMethod.POST)
+	public ResponseEntity<ClienteDto> saveCliente(@RequestBody ClienteDto clienteDto) {
+		Cliente c = new Cliente();
+		if(clienteDto.getId() != null && clienteDto.getId() > 0) {
+			c = clienteService.findById(clienteDto.getId());
+		}
+		c = parseClienteDtoToCliente(c, clienteDto);
+		return new ResponseEntity<>(new ClienteDto(clienteService.save(c)), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	public Boolean delete(@PathVariable("id") Long clienteId) {
+		Cliente c = clienteService.findById(clienteId);
+		if(c != null) {
+			clienteService.deleteById(c.getId());
+			return true;
+		}
+		return false;
+	}
+	
+	private List<ClienteDto> parseListClienteToListClienteDto(List<Cliente> list) {
 		List<ClienteDto> listClienteDto = new ArrayList<>();
 		for (Cliente c : list) {
 			listClienteDto.add(new ClienteDto(c));
 		}
 		return listClienteDto;
+	}
+	
+	private Cliente parseClienteDtoToCliente(Cliente cliente, ClienteDto dto) {
+		cliente.setCelular(dto.getCelular());
+		cliente.setCep(dto.getCep());
+		cliente.setCidade(dto.getCidade());
+		cliente.setContato(dto.getContato());
+		cliente.setCpfCnpj(dto.getCpfCnpj());
+		cliente.setEmail(dto.getEmail());
+		cliente.setEndereco(dto.getEndereco());
+		cliente.setEstado(dto.getEstado());
+		cliente.setNomeCompleto(dto.getNomeCompleto());
+		cliente.setRg(dto.getRg());
+		cliente.setTelefone(dto.getTelefone());
+		cliente.setTipoClienteEnum(TipoClienteEnum.valueOf(dto.getTipoCliente()));
+		if(cliente.getLoja() == null) {
+			Loja loja = lojaService.findById(dto.getLojaId());
+			cliente.setLoja(loja);
+		}
+		return cliente;
 	}
 
 }

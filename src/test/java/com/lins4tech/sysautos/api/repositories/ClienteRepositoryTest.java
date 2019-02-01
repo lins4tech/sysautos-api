@@ -55,8 +55,8 @@ public class ClienteRepositoryTest {
 	
 	@After
 	public final void tearDown() throws Exception {
-//		this.clienteRepository.deleteAll();
-//		this.lojaRepository.deleteAll();
+		this.clienteRepository.deleteAll();
+		this.lojaRepository.deleteAll();
 	}
 	
 	private Cliente generateCliente(Loja loja, String nome, String cpf, TipoClienteEnum tipo) {
@@ -76,7 +76,7 @@ public class ClienteRepositoryTest {
 	
 	@Test
 	public void testFindClienteByLojaId() {
-		Loja loja = lojaRepository.findByCnpj(CNPJ);
+		Loja loja = lojaRepository.findByCnpj(CNPJ).orElse(null);
 		PageRequest pageable = PageRequest.of(0, 10);
 		Page<Cliente> list = clienteRepository.findByLojaId(loja.getId(), pageable);
 		assertTrue(list.getNumberOfElements() == 2);
@@ -84,7 +84,7 @@ public class ClienteRepositoryTest {
 	
 	@Test
 	public void testFindClientePF() {
-		Loja loja = lojaRepository.findByCnpj(CNPJ);
+		Loja loja = lojaRepository.findByCnpj(CNPJ).orElse(null);
 		String nome = "Cliente";
 		String email = "@gmail.com";
 		String cpf = "05259988450";
@@ -96,7 +96,7 @@ public class ClienteRepositoryTest {
 	
 	@Test
 	public void testFindClientePJ() {
-		Loja loja = lojaRepository.findByCnpj(CNPJ);
+		Loja loja = lojaRepository.findByCnpj(CNPJ).orElse(null);
 		TipoClienteEnum tipo = TipoClienteEnum.PJ;
 		PageRequest pageable = PageRequest.of(0, 10);
 		List<Cliente> list = clienteRepository.findCliente(loja.getId(), null, null, null, tipo, pageable);

@@ -49,7 +49,7 @@ public class ClienteRepositoryCustomImpl implements ClienteRepositoryCustom{
 			sbQuery.append(" AND c.tipoClienteEnum = :tipo ");
 			parameters.put("tipo", tipo);
 		}
-		if(pageable != null) {
+		if(pageable != null && !pageable.getSort().isEmpty()) {
 			Order order = pageable.getSort().iterator().next();
 			if(order != null) {
 				sbQuery.append(" ORDER BY c.".concat(order.getProperty()).concat(order.getDirection().isDescending()? " DESC" : " ASC"));

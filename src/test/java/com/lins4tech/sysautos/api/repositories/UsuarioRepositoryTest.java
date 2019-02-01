@@ -16,7 +16,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.lins4tech.sysautos.api.entities.Loja;
 import com.lins4tech.sysautos.api.entities.Usuario;
-import com.lins4tech.sysautos.api.enums.TipoClienteEnum;
 import com.lins4tech.sysautos.api.enums.TipoUsuarioEnum;
 
 @RunWith(SpringRunner.class)
@@ -71,9 +70,8 @@ public class UsuarioRepositoryTest {
 	
 	@Test
 	public void testFindUsuarioByLojaId() {
-		Loja loja = lojaRepository.findByCnpj(CNPJ);
-		@SuppressWarnings("deprecation")
-		PageRequest pageable = new PageRequest(0, 10);
+		Loja loja = lojaRepository.findByCnpj(CNPJ).orElse(null);
+		PageRequest pageable = PageRequest.of(0, 10);
 		List<Usuario> list = usuarioRepository.findByLojaId(loja.getId(), pageable);
 		assertTrue(list.size() == 2);
 	}
