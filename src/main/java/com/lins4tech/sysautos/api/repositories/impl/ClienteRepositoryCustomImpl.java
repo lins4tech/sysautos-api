@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import com.lins4tech.sysautos.api.entities.ClienteApiProcob;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Repository;
@@ -64,9 +65,22 @@ public class ClienteRepositoryCustomImpl implements ClienteRepositoryCustom{
 			query.setFirstResult(pageable.getPageNumber());
 			query.setMaxResults(pageable.getPageSize());
 		}
-		
-		
 		return query.getResultList();
+	}
+
+	@Override
+	@Transactional(readOnly = false)
+	public ClienteApiProcob saveClienteApiProcob(ClienteApiProcob entity) {
+		return entityManager.merge(entity);
+	}
+
+	@Override
+	public ClienteApiProcob findClienteApiProcobByCpfCnpj(String cpfCnpj) {
+		StringBuilder sbQuery = new StringBuilder();
+		sbQuery.append("SELECT cp FROM ClienteApiProcob cp WHERE cp.cpfCnpj = :cpfCnpj ");
+		TypedQuery<ClienteApiProcob> query = entityManager.createQuery(sbQuery.toString(), ClienteApiProcob.class);
+		query.setParameter("cpfCnpj", cpfCnpj);
+		return query.getResultList().stream().findFirst().orElse(null);
 	}
 
 }

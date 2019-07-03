@@ -2,6 +2,7 @@ package com.lins4tech.sysautos.api.services;
 
 import java.util.List;
 
+import com.lins4tech.sysautos.api.entities.ClienteApiProcob;
 import org.springframework.data.domain.PageRequest;
 
 import com.lins4tech.sysautos.api.entities.Cliente;
@@ -28,6 +29,8 @@ public interface ClienteService {
 	 * @return Cliente
 	 */
 	Cliente findByLojaIdAndCpfCnpj(Long lojaId, String cpfCnpj);
+
+	Cliente findByLojaIdAndEmail(Long lojaId, String email);
 	
 	/**
 	 * Consulta o cliente pelo Id.
@@ -40,5 +43,9 @@ public interface ClienteService {
 	Cliente save(Cliente c);
 	
 	void deleteById(Long id);
+
+	ClienteApiProcob findClienteApiProcobByCpfCnpj(String cpfCnpj);
+
+	ClienteApiProcob saveClienteApiProcob(ClienteApiProcob c);
 
 }

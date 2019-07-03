@@ -33,4 +33,7 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long>, Cliente
 	
 	@Transactional(readOnly = true)
 	Cliente findByLojaIdAndCpfCnpj(Long lojaId, String cpfCnpj);
+
+	@Transactional(readOnly = true)
+	Cliente findByLojaIdAndEmail(Long lojaId, String email);
 }

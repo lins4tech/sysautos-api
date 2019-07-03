@@ -2,6 +2,7 @@ package com.lins4tech.sysautos.api.services.impl;
 
 import java.util.List;
 
+import com.lins4tech.sysautos.api.entities.ClienteApiProcob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +32,25 @@ public class ClienteServiceImpl implements ClienteService{
 		log.info("Consultar Cliente por LojaId:{} e CpfCnpj: {}", lojaId, cpfCnpj);
 		return clienteRepository.findByLojaIdAndCpfCnpj(lojaId, cpfCnpj);
 	}
+
+	public Cliente findByLojaIdAndEmail(Long lojaId, String email) {
+		log.info("Consultar Cliente por LojaId:{} e Email: {}", lojaId, email);
+		return clienteRepository.findByLojaIdAndEmail(lojaId, email);
+	}
+
+	public ClienteApiProcob findClienteApiProcobByCpfCnpj(String cpfCnpj) {
+		log.info("Consultar ClienteApiProcob por CPF_CNPJ:{}", cpfCnpj);
+		return clienteRepository.findClienteApiProcobByCpfCnpj(cpfCnpj);
+	}
 	
 	public Cliente save(Cliente c) {
 		log.info("Salvando um Cliente: {}", c);
 		return clienteRepository.save(c);
+	}
+
+	public ClienteApiProcob saveClienteApiProcob(ClienteApiProcob c) {
+		log.info("Salvando um ClienteApiProcob: {}", c);
+		return clienteRepository.saveClienteApiProcob(c);
 	}
 	
 	public void deleteById(Long id) {
@@ -44,11 +60,6 @@ public class ClienteServiceImpl implements ClienteService{
 	public Cliente findById(Long id) {
 		log.info("FindById ClienteId: {}", id);
 		return clienteRepository.findById(id).orElse(null);
-	}
-	
-	public void remove(Long clienteId) {
-		log.info("Excluindo o Cliente: {}", clienteId);
-		clienteRepository.deleteById(clienteId);
 	}
 
 }
