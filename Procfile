@@ -1,0 +1,1 @@
+web: java -Dserver.port=$PORT -Dsping.profiles.active=prod -jar target/SysAutos-0.0.1-SNAPSHOT.jar

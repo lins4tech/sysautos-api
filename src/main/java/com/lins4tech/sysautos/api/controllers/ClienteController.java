@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.lins4tech.sysautos.api.dtos.ClienteApiProcobDto;
+import com.lins4tech.sysautos.api.dtos.UsuarioCustomDto;
 import com.lins4tech.sysautos.api.entities.ClienteApiProcob;
 import com.lins4tech.sysautos.api.procob.cliente.ClienteApiProcobJson;
 import com.lins4tech.sysautos.api.utils.ConvertDtoUtil;
@@ -20,6 +21,7 @@ import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -62,7 +64,9 @@ public class ClienteController {
 			@RequestParam(value = "ord", defaultValue = "nomeCompleto") String ord,
 			@RequestParam(value = "dir", defaultValue = "DESC") String dir,
 			@RequestParam(value = "size", defaultValue = "30") Integer size) {
-		
+
+		UsuarioCustomDto usuarioLogado = (UsuarioCustomDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
 		PageRequest pageRequest = PageRequest.of(pag, size, Direction.valueOf(dir), ord);
 		log.info("Chamada ao ClienteController.findCliente - LojaId = {}", lojaId);
 		TipoClienteEnum tipoCliente = null;
