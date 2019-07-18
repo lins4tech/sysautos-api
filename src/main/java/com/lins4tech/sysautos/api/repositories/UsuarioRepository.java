@@ -1,6 +1,7 @@
 package com.lins4tech.sysautos.api.repositories;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
@@ -17,4 +18,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
 	
 	@Transactional(readOnly = true)
 	List<Usuario> findByLojaId(Long lojaId, Pageable pageable);
+
+	Optional<Usuario> findByEmail(String email);
 }
